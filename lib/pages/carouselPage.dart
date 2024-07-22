@@ -21,6 +21,8 @@ class _CarouselPageState extends State<CarouselPage> {
     viewportFraction: 0.8,
   );
 
+  final coutPhotoFontSize = 20.0;
+
   @override
   void initState() {
     super.initState();
@@ -35,15 +37,29 @@ class _CarouselPageState extends State<CarouselPage> {
   AppBar get _carouselAppBar => AppBar(
         centerTitle: true,
         title: Text("$_datePhoto"),
+        leading: IconButton(
+          onPressed: () {},
+          icon: const Icon(
+            Icons.arrow_back,
+            size: 26.0,
+          ),
+        ),
         actions: [
+          Padding(
+              padding: const EdgeInsets.fromLTRB(0, 10.0, 20.0, 5),
+              child: _CountPhotoTitle),
+        ],
+      );
+
+  Widget get _CountPhotoTitle => Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
           Text(
             "$_nowPhoto",
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: TextStyle(
+                fontWeight: FontWeight.bold, fontSize: coutPhotoFontSize),
           ),
-          Text("/${_maxPhoto}"),
-          SizedBox(
-            width: 10.0,
-          )
+          Text("/${_maxPhoto}", style: TextStyle(fontSize: coutPhotoFontSize)),
         ],
       );
 
@@ -53,7 +69,7 @@ class _CarouselPageState extends State<CarouselPage> {
     return Scaffold(
         appBar: _carouselAppBar,
         body: Padding(
-          padding: const EdgeInsets.fromLTRB(2.0, 80.0, 2.0, 160.0),
+          padding: const EdgeInsets.fromLTRB(2.0, 40.0, 2.0, 80.0),
           child: _CarouselPhotoView(),
         ));
   }
@@ -63,7 +79,7 @@ class _CarouselPageState extends State<CarouselPage> {
         itemBuilder: (context, _pageId) {
           bool _isActivePhoto = _pageId == (_nowPhoto! - 1);
           return AnimatedContainer(
-              duration: Duration(milliseconds: 500),
+              duration: const Duration(milliseconds: 500),
               curve: Curves.easeInOutCubic,
               margin: EdgeInsets.all(_isActivePhoto ? 10 : 20),
               child: _gallery?.elementAt(_pageId));

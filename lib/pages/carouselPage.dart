@@ -1,5 +1,3 @@
-// ignore_for_file: non_constant_identifier_names
-
 import 'package:flutter/material.dart';
 import 'package:surf_flutter_summer_school_24/postgramAPI/postgramAPI.dart';
 
@@ -19,7 +17,7 @@ class _CarouselPageState extends State<CarouselPage> {
   int? _maxPhoto;
   int? _nowPhoto;
 
-  final PageController _carouselController = PageController(
+  PageController _carouselController = PageController(
     viewportFraction: 0.8,
   );
 
@@ -31,7 +29,7 @@ class _CarouselPageState extends State<CarouselPage> {
     setState(() {
       _gallery = PostgramAPI.getAllPhotoFromAccount();
       _maxPhoto = _gallery?.length;
-      _nowPhoto = _carouselController.initialPage;
+      _nowPhoto = _carouselController.initialPage + 1;
     });
   }
 
@@ -57,7 +55,7 @@ class _CarouselPageState extends State<CarouselPage> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            "${_nowPhoto! + 1}",
+            "$_nowPhoto",
             style: TextStyle(
                 fontWeight: FontWeight.bold, fontSize: coutPhotoFontSize),
           ),
@@ -79,7 +77,7 @@ class _CarouselPageState extends State<CarouselPage> {
   Widget _CarouselPhotoView() => PageView.builder(
         itemCount: _gallery?.length ?? 1,
         itemBuilder: (context, _pageId) {
-          bool _isActivePhoto = _pageId == (_nowPhoto);
+          bool _isActivePhoto = _pageId == (_nowPhoto! - 1);
           return AnimatedContainer(
               duration: const Duration(milliseconds: 500),
               curve: Curves.easeInOutCubic,
@@ -96,7 +94,7 @@ class _CarouselPageState extends State<CarouselPage> {
         // children: _gallery ?? [const CircularProgressIndicator()],
         onPageChanged: (int newPage) {
           setState(() {
-            _nowPhoto = newPage;
+            _nowPhoto = newPage + 1;
           });
         },
       );

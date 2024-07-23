@@ -1,7 +1,11 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
-import 'package:surf_flutter_summer_school_24/pages/carouselPage.dart';
-import 'package:surf_flutter_summer_school_24/pages/themeBottomSheet.dart';
-import 'package:surf_flutter_summer_school_24/postgramAPI/postgramAPI.dart';
+import 'package:provider/provider.dart';
+import 'package:surf_flutter_summer_school_24/pages/CarouselPage.dart';
+import 'package:surf_flutter_summer_school_24/pages/ThemeBottomSheet.dart';
+import 'package:surf_flutter_summer_school_24/postgramAPI/PostgramAPI.dart';
+import 'package:surf_flutter_summer_school_24/themes/ThemeProvider.dart';
 
 class GalleryPage extends StatefulWidget {
   const GalleryPage({super.key});
@@ -14,30 +18,37 @@ class _GalleryPageState extends State<GalleryPage> {
   //Get data gallery
   List<Image> gallery = PostgramAPI.getImagesFromAccount();
 
+  String titleImageLightDirectory = "assets/images/titlePGlight.png";
+  String titleImageDarkDirectory = "assets/images/titlePGdark.png";
+
   ///Override Methods
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _galleryAppBar,
-      body: Padding(
-          padding: const EdgeInsets.fromLTRB(5, 20, 5, 0), child: _galleryGrid),
-    );
+    return Consumer<Themeprovider>(
+        builder: (context, Themeprovider notifier, child) {
+      return Scaffold(
+        appBar: _galleryAppBar(isDarkTheme: notifier.isDark),
+        body: Padding(
+            padding: const EdgeInsets.fromLTRB(5, 20, 5, 0),
+            child: _galleryGrid),
+      );
+    });
   }
 
   ///App Bar
-  AppBar get _galleryAppBar => AppBar(
+  AppBar _galleryAppBar({bool isDarkTheme = false}) => AppBar(
         centerTitle: true,
         title: Image.asset(
-          "assets/images/titlePGdark.png",
-          height: 960,
-          width: 200,
+          isDarkTheme ? titleImageDarkDirectory : titleImageLightDirectory,
+          //height: 60,
+          width: 160,
         ),
         actions: [_settingsAppBarButton],
       );
 
   void _showThemeBottomSheet(BuildContext context) {
     showModalBottomSheet(
-        context: context, builder: (context) => Themebottomsheet());
+        context: context, builder: (context) => MenuBottomSheet());
   }
 
   IconButton get _settingsAppBarButton => IconButton(
@@ -62,10 +73,10 @@ class _GalleryPageState extends State<GalleryPage> {
       });
 
   Widget _photoContainer(int index) {
-    const _photoSize = Size(116, 116);
+    const photoSize = Size(116, 116);
     return SizedBox(
-      height: _photoSize.height,
-      width: _photoSize.width,
+      height: photoSize.height,
+      width: photoSize.width,
       child: InkWell(
         onTap: () {
           Navigator.push(
@@ -75,7 +86,7 @@ class _GalleryPageState extends State<GalleryPage> {
                         indexPhoto: index,
                       )));
         },
-        child: gallery?.elementAt(index),
+        child: gallery.elementAt(index),
       ),
     );
   }

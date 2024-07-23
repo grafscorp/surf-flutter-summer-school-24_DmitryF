@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:surf_flutter_summer_school_24/pages/carouselPage.dart';
 
 void main() {
   runApp(const MainApp());
@@ -13,7 +12,7 @@ class MainApp extends StatelessWidget {
     return const MaterialApp(
       home: Scaffold(
         body: Center(
-          child: CarouselPage(),
+          child: Text('Hello World!'),
         ),
       ),
     );

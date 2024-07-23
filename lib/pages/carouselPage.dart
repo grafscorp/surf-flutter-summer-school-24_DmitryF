@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:surf_flutter_summer_school_24/postgramAPI/postgramAPI.dart';
 
@@ -22,28 +24,11 @@ class _CarouselPageState extends State<CarouselPage> {
   int? _maxPhoto;
   int? _nowPhoto;
 
-  PageController _carouselController = PageController(
+  final PageController _carouselController = PageController(
     viewportFraction: 0.8,
   );
 
   final coutPhotoFontSize = 20.0;
-
-  @override
-  void initState() {
-    super.initState();
-    setState(() {
-      _gallery = PostgramAPI.getImagesFromAccount();
-      _maxPhoto = _gallery?.length;
-      // if (_carouselController.hasClients) {
-      //   _carouselController.jumpToPage(_nowPhoto ?? 0);
-      // }
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (_carouselController.hasClients) {
-          _carouselController.jumpToPage(_nowPhoto ?? 0);
-        }
-      });
-    });
-  }
 
   //Widgets
   AppBar get _carouselAppBar => AppBar(
@@ -61,11 +46,11 @@ class _CarouselPageState extends State<CarouselPage> {
         actions: [
           Padding(
               padding: const EdgeInsets.fromLTRB(0, 10.0, 20.0, 5),
-              child: _CountPhotoTitle),
+              child: _countPhotoTitle),
         ],
       );
-
-  Widget get _CountPhotoTitle => Row(
+  //Информация о позиции текущей фотографии и общее кол-во
+  Widget get _countPhotoTitle => Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
@@ -73,52 +58,69 @@ class _CarouselPageState extends State<CarouselPage> {
             style: TextStyle(
                 fontWeight: FontWeight.bold, fontSize: coutPhotoFontSize),
           ),
-          Text("/${_maxPhoto}", style: TextStyle(fontSize: coutPhotoFontSize)),
+          Text("/$_maxPhoto", style: TextStyle(fontSize: coutPhotoFontSize)),
         ],
       );
 
   //override Methods
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      _gallery = PostgramAPI.getImagesFromAccount();
+      _maxPhoto = _gallery?.length;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        //Жду пока страница прогрузиться
+        if (_carouselController.hasClients) {
+          _carouselController.jumpToPage(_nowPhoto ?? 0);
+        }
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: _carouselAppBar,
         body: Padding(
           padding: const EdgeInsets.fromLTRB(2.0, 40.0, 2.0, 80.0),
-          child: _CarouselPhotoView(),
+          child: _carouselPhotoView(),
         ));
   }
 
-  Widget _CarouselPhotoView() => PageView.builder(
+  Widget _carouselPhotoView() => PageView.builder(
         itemCount: _gallery?.length ?? 1,
-        itemBuilder: (context, _photoId) {
-          bool _isActivePhoto = _photoId == (_nowPhoto);
+        itemBuilder: (context, photoId) {
+          bool isActivePhoto = photoId == (_nowPhoto);
+          //Анимация для слайда изображений
           return AnimatedContainer(
               duration: const Duration(milliseconds: 500),
               curve: Curves.easeInOutCubic,
-              margin: EdgeInsets.all(_isActivePhoto ? 10 : 20),
-              child: _imageCard(_photoId));
-          // return _gallery
-          //     ?.elementAt(_pageId); //[const CircularProgressIndicator()];
+              margin: EdgeInsets.only(
+                  left: isActivePhoto ? 0 : 10,
+                  top: isActivePhoto ? 0 : 40,
+                  right: isActivePhoto ? 0 : 10,
+                  bottom:
+                      isActivePhoto ? 0 : 40), // all(_isActivePhoto ? 10 : 20),
+              child: _imageCard(photoId));
         },
         pageSnapping: true,
-
         physics: const BouncingScrollPhysics(),
         scrollDirection: Axis.horizontal,
         controller: _carouselController,
-        // children: _gallery ?? [const CircularProgressIndicator()],
         onPageChanged: (int newPage) {
           setState(() {
             _nowPhoto = newPage;
           });
         },
       );
-
+  //Форма для вывода изображений
   Widget _imageCard(index) {
     return Card(
         semanticContainer: true,
         clipBehavior: Clip.antiAliasWithSaveLayer,
         shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(24.0)),
         child: _gallery?.elementAt(index));
   }
 }

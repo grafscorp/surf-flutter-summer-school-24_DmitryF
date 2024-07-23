@@ -29,7 +29,7 @@ class _CarouselPageState extends State<CarouselPage> {
     setState(() {
       _gallery = PostgramAPI.getAllPhotoFromAccount();
       _maxPhoto = _gallery?.length;
-      _nowPhoto = _carouselController.initialPage + 1;
+      _nowPhoto = _carouselController.initialPage;
     });
   }
 
@@ -77,7 +77,7 @@ class _CarouselPageState extends State<CarouselPage> {
   Widget _CarouselPhotoView() => PageView.builder(
         itemCount: _gallery?.length ?? 1,
         itemBuilder: (context, _pageId) {
-          bool _isActivePhoto = _pageId == (_nowPhoto! - 1);
+          bool _isActivePhoto = _pageId == (_nowPhoto);
           return AnimatedContainer(
               duration: const Duration(milliseconds: 500),
               curve: Curves.easeInOutCubic,
@@ -94,7 +94,7 @@ class _CarouselPageState extends State<CarouselPage> {
         // children: _gallery ?? [const CircularProgressIndicator()],
         onPageChanged: (int newPage) {
           setState(() {
-            _nowPhoto = newPage + 1;
+            _nowPhoto = newPage;
           });
         },
       );

@@ -2,13 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:surf_flutter_summer_school_24/postgramAPI/postgramAPI.dart';
 
 class CarouselPage extends StatefulWidget {
-  const CarouselPage({super.key});
+  final int indexPhoto;
+  const CarouselPage({super.key, required this.indexPhoto});
 
   @override
-  State<CarouselPage> createState() => _CarouselPageState();
+  State<CarouselPage> createState() => _CarouselPageState(indexPhoto);
 }
 
 class _CarouselPageState extends State<CarouselPage> {
+  _CarouselPageState(indexPhoto) {
+    _nowPhoto = indexPhoto;
+  }
+
   //Variables
   String? _datePhoto;
 
@@ -27,9 +32,16 @@ class _CarouselPageState extends State<CarouselPage> {
   void initState() {
     super.initState();
     setState(() {
-      _gallery = PostgramAPI.getAllPhotoFromAccount();
+      _gallery = PostgramAPI.getImagesFromAccount();
       _maxPhoto = _gallery?.length;
-      _nowPhoto = _carouselController.initialPage;
+      // if (_carouselController.hasClients) {
+      //   _carouselController.jumpToPage(_nowPhoto ?? 0);
+      // }
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (_carouselController.hasClients) {
+          _carouselController.jumpToPage(_nowPhoto ?? 0);
+        }
+      });
     });
   }
 
@@ -38,7 +50,9 @@ class _CarouselPageState extends State<CarouselPage> {
         centerTitle: true,
         title: Text("$_datePhoto"),
         leading: IconButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pop(context);
+          },
           icon: const Icon(
             Icons.arrow_back,
             size: 26.0,
@@ -55,7 +69,7 @@ class _CarouselPageState extends State<CarouselPage> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            "$_nowPhoto",
+            "${_nowPhoto! + 1}",
             style: TextStyle(
                 fontWeight: FontWeight.bold, fontSize: coutPhotoFontSize),
           ),
@@ -76,13 +90,13 @@ class _CarouselPageState extends State<CarouselPage> {
 
   Widget _CarouselPhotoView() => PageView.builder(
         itemCount: _gallery?.length ?? 1,
-        itemBuilder: (context, _pageId) {
-          bool _isActivePhoto = _pageId == (_nowPhoto);
+        itemBuilder: (context, _photoId) {
+          bool _isActivePhoto = _photoId == (_nowPhoto);
           return AnimatedContainer(
               duration: const Duration(milliseconds: 500),
               curve: Curves.easeInOutCubic,
               margin: EdgeInsets.all(_isActivePhoto ? 10 : 20),
-              child: _gallery?.elementAt(_pageId));
+              child: _imageCard(_photoId));
           // return _gallery
           //     ?.elementAt(_pageId); //[const CircularProgressIndicator()];
         },
@@ -98,4 +112,13 @@ class _CarouselPageState extends State<CarouselPage> {
           });
         },
       );
+
+  Widget _imageCard(index) {
+    return Card(
+        semanticContainer: true,
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+        child: _gallery?.elementAt(index));
+  }
 }

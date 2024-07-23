@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:surf_flutter_summer_school_24/pages/galleryPage.dart';
-import 'package:surf_flutter_summer_school_24/themes/themedark.dart';
-import 'package:surf_flutter_summer_school_24/themes/themelight.dart';
+import 'package:provider/provider.dart';
+import 'package:surf_flutter_summer_school_24/pages/GalleryPage.dart';
+import 'package:surf_flutter_summer_school_24/themes/ThemeProvider.dart';
+import 'package:surf_flutter_summer_school_24/themes/Themedark.dart';
+import 'package:surf_flutter_summer_school_24/themes/Themelight.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MainApp());
 }
 
@@ -13,14 +15,18 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: DarkTheme(),
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: Center(
-          child: GalleryPage(),
-        ),
-      ),
-    );
+    return ChangeNotifierProvider(
+        create: (context) => Themeprovider()..init(),
+        child: Consumer<Themeprovider>(
+          builder: (context, Themeprovider notifier, child) => MaterialApp(
+            theme: notifier.isDark ? darkTheme() : lightTheme(),
+            debugShowCheckedModeBanner: false,
+            home: const Scaffold(
+              body: Center(
+                child: GalleryPage(),
+              ),
+            ),
+          ),
+        ));
   }
 }

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:surf_flutter_summer_school_24/pages/carouselPage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:surf_flutter_summer_school_24/pages/galleryPage.dart';
+import 'package:surf_flutter_summer_school_24/themes/themedark.dart';
+import 'package:surf_flutter_summer_school_24/themes/themelight.dart';
 
 void main() {
   runApp(const MainApp());
@@ -10,10 +13,12 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
+      theme: DarkTheme(),
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: Center(
-          child: CarouselPage(),
+          child: GalleryPage(),
         ),
       ),
     );

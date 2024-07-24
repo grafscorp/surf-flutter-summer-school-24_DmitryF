@@ -1,28 +1,28 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
-import 'package:surf_flutter_summer_school_24/postgramAPI/PostgramAPI.dart';
+import 'package:intl/intl.dart';
+//import 'package:surf_flutter_summer_school_24/postgramAPI/PostgramAPI.dart';
+
+import 'package:surf_flutter_summer_school_24/postgramAPI/models/PostgramPhotoController.dart';
+import 'package:surf_flutter_summer_school_24/postgramAPI/models/PostogramImage.dart';
 
 class CarouselPage extends StatefulWidget {
   final int indexPhoto;
   const CarouselPage({super.key, required this.indexPhoto});
 
   @override
-  State<CarouselPage> createState() => _CarouselPageState(indexPhoto);
+  State<CarouselPage> createState() {
+    return _CarouselPageState();
+  }
 }
 
 class _CarouselPageState extends State<CarouselPage> {
-  _CarouselPageState(indexPhoto) {
-    _nowPhoto = indexPhoto;
-  }
-
   //Variables
-  String? _datePhoto;
 
-  List<Widget>? _gallery;
-
-  int? _maxPhoto;
-  int? _nowPhoto;
+  late int _maxPhoto;
+  late int _nowPhoto;
+  late DateTime? _photoCreatedAt;
 
   final PageController _carouselController = PageController(
     viewportFraction: 0.8,
@@ -33,7 +33,9 @@ class _CarouselPageState extends State<CarouselPage> {
   //Widgets
   AppBar get _carouselAppBar => AppBar(
         centerTitle: true,
-        title: Text("$_datePhoto"),
+        title: Text(_photoCreatedAt != null
+            ? DateFormat('dd-MM-yyyy').format(_photoCreatedAt!)
+            : ""),
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
@@ -54,7 +56,7 @@ class _CarouselPageState extends State<CarouselPage> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            "${_nowPhoto! + 1}",
+            "${_nowPhoto + 1}",
             style: TextStyle(
                 fontWeight: FontWeight.bold, fontSize: coutPhotoFontSize),
           ),
@@ -62,17 +64,28 @@ class _CarouselPageState extends State<CarouselPage> {
         ],
       );
 
+  void updatePhotoData(int indexPhoto) {
+    setState(() {
+      _nowPhoto = indexPhoto;
+      _photoCreatedAt =
+          PostgramPhotoController.photoList.elementAt(_nowPhoto).createdAt;
+    });
+  }
+
   //override Methods
   @override
   void initState() {
     super.initState();
+    _nowPhoto = widget.indexPhoto;
+    _photoCreatedAt =
+        PostgramPhotoController.photoList.elementAt(_nowPhoto).createdAt;
+    _maxPhoto = PostgramPhotoController.photoList.length;
+
     setState(() {
-      _gallery = PostgramAPI.getImagesFromAccount();
-      _maxPhoto = _gallery?.length;
       WidgetsBinding.instance.addPostFrameCallback((_) {
         //Жду пока страница прогрузиться
         if (_carouselController.hasClients) {
-          _carouselController.jumpToPage(_nowPhoto ?? 0);
+          _carouselController.jumpToPage(_nowPhoto);
         }
       });
     });
@@ -89,7 +102,7 @@ class _CarouselPageState extends State<CarouselPage> {
   }
 
   Widget _carouselPhotoView() => PageView.builder(
-        itemCount: _gallery?.length ?? 1,
+        itemCount: PostgramPhotoController.photoList.length,
         itemBuilder: (context, photoId) {
           bool isActivePhoto = photoId == (_nowPhoto);
           //Анимация для слайда изображений
@@ -109,9 +122,7 @@ class _CarouselPageState extends State<CarouselPage> {
         scrollDirection: Axis.horizontal,
         controller: _carouselController,
         onPageChanged: (int newPage) {
-          setState(() {
-            _nowPhoto = newPage;
-          });
+          updatePhotoData(newPage);
         },
       );
   //Форма для вывода изображений
@@ -121,6 +132,7 @@ class _CarouselPageState extends State<CarouselPage> {
         clipBehavior: Clip.antiAliasWithSaveLayer,
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(24.0)),
-        child: _gallery?.elementAt(index));
+        child: PostogramImage(
+            photoData: PostgramPhotoController.photoList.elementAt(index)));
   }
 }

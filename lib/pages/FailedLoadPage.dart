@@ -14,24 +14,34 @@ class FailedLoadPage extends StatelessWidget {
             size: 74,
           ),
           Text(
-            "Упс",
+            "Упс!",
             style: Theme.of(context)
                 .textTheme
                 .headlineMedium
-                ?.copyWith(fontSize: 63),
+                ?.copyWith(fontSize: 36),
           ),
-          const Text("Произошла ошибка.\nПопробуйте снова."),
+          Text(
+            "Произошла ошибка.\nПопробуйте снова.",
+            style: Theme.of(context)
+                .textTheme
+                .headlineMedium
+                ?.copyWith(fontSize: 16),
+          ),
           ElevatedButton(
             onPressed: () {},
             style: Theme.of(context).elevatedButtonTheme.style?.copyWith(
-                backgroundColor:
-                    WidgetStatePropertyAll(Color.fromARGB(255, 36, 115, 135))),
+                shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16.0))),
+                padding: const WidgetStatePropertyAll(
+                    EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0)),
+                backgroundColor: const WidgetStatePropertyAll(
+                    Color.fromARGB(255, 36, 115, 135))),
             child: Text(
               "Попробовать снова".toUpperCase(),
               style: Theme.of(context)
                   .textTheme
                   .headlineLarge
-                  ?.copyWith(color: Colors.white),
+                  ?.copyWith(color: Colors.white, fontSize: 15),
             ),
           )
         ],

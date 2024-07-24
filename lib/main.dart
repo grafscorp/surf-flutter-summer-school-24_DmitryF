@@ -21,10 +21,8 @@ class MainApp extends StatelessWidget {
           builder: (context, Themeprovider notifier, child) => MaterialApp(
             theme: notifier.isDark ? darkTheme() : lightTheme(),
             debugShowCheckedModeBanner: false,
-            home: const Scaffold(
-              body: Center(
-                child: GalleryPage(),
-              ),
+            home: const Center(
+              child: GalleryPage(),
             ),
           ),
         ));

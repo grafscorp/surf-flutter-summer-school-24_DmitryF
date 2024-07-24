@@ -3,8 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:surf_flutter_summer_school_24/pages/CarouselPage.dart';
+import 'package:surf_flutter_summer_school_24/pages/FailedLoadPage.dart';
 import 'package:surf_flutter_summer_school_24/pages/ThemeBottomSheet.dart';
-import 'package:surf_flutter_summer_school_24/postgramAPI/PostgramAPI.dart';
+import 'package:surf_flutter_summer_school_24/postgramAPI/models/PostgramPhotoController.dart';
+import 'package:surf_flutter_summer_school_24/postgramAPI/models/PostogramImage.dart';
 import 'package:surf_flutter_summer_school_24/themes/ThemeProvider.dart';
 
 class GalleryPage extends StatefulWidget {
@@ -16,10 +18,16 @@ class GalleryPage extends StatefulWidget {
 
 class _GalleryPageState extends State<GalleryPage> {
   //Get data gallery
-  List<Image> gallery = PostgramAPI.getImagesFromAccount();
+  //List<Image> gallery = PostgramAPI.getImagesFromAccount();
 
   String titleImageLightDirectory = "assets/images/titlePGlight.png";
   String titleImageDarkDirectory = "assets/images/titlePGdark.png";
+
+  @override
+  void initState() {
+    super.initState();
+    PostgramPhotoController.updatePhotoList();
+  }
 
   ///Override Methods
   @override
@@ -27,11 +35,28 @@ class _GalleryPageState extends State<GalleryPage> {
     return Consumer<Themeprovider>(
         builder: (context, Themeprovider notifier, child) {
       return Scaffold(
-        appBar: _galleryAppBar(isDarkTheme: notifier.isDark),
-        body: Padding(
-            padding: const EdgeInsets.fromLTRB(5, 20, 5, 0),
-            child: _galleryGrid),
-      );
+          appBar: _galleryAppBar(isDarkTheme: notifier.isDark),
+          body:
+              // Padding(
+              //     padding: const EdgeInsets.fromLTRB(5, 20, 5, 0),
+              //     child: _galleryGrid)
+              //Test Without Connetction Check
+              FutureBuilder(
+                  future: PostgramPhotoController.updatePhotoList(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      return Padding(
+                          padding: const EdgeInsets.fromLTRB(5, 20, 5, 0),
+                          child: _galleryGrid);
+                    } else if (snapshot.connectionState ==
+                        ConnectionState.none) {
+                      return const FailedLoadPage();
+                    } else {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                  }));
     });
   }
 
@@ -67,7 +92,7 @@ class _GalleryPageState extends State<GalleryPage> {
         crossAxisSpacing: 3,
         crossAxisCount: 3,
       ),
-      itemCount: gallery.length,
+      itemCount: PostgramPhotoController.photoList.length,
       itemBuilder: (context, index) {
         return _photoContainer(index);
       });
@@ -75,19 +100,20 @@ class _GalleryPageState extends State<GalleryPage> {
   Widget _photoContainer(int index) {
     const photoSize = Size(116, 116);
     return SizedBox(
-      height: photoSize.height,
-      width: photoSize.width,
-      child: InkWell(
-        onTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => CarouselPage(
-                        indexPhoto: index,
-                      )));
-        },
-        child: gallery.elementAt(index),
-      ),
-    );
+        height: photoSize.height,
+        width: photoSize.width,
+        child: InkWell(
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => CarouselPage(
+                          indexPhoto: index,
+                        )));
+          },
+          child: PostogramImage(
+            photoData: PostgramPhotoController.photoList.elementAt(index),
+          ),
+        ));
   }
 }

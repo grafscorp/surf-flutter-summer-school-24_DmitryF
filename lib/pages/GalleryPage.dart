@@ -53,7 +53,8 @@ class _GalleryPageState extends State<GalleryPage> {
                       return const FailedLoadPage();
                     } else {
                       return const Center(
-                        child: CircularProgressIndicator(),
+                        child: //FailedLoadPage()
+                            CircularProgressIndicator(),
                       );
                     }
                   }));

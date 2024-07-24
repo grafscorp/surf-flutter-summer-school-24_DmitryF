@@ -1,7 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
-import 'package:surf_flutter_summer_school_24/postgramAPI/postgramAPI.dart';
+import 'package:surf_flutter_summer_school_24/postgramAPI/PostgramAPI.dart';
 
 class CarouselPage extends StatefulWidget {
   final int indexPhoto;

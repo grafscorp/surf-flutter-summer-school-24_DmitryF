@@ -12,6 +12,7 @@ import 'dart:convert';
 
 import 'package:surf_flutter_summer_school_24/postgramAPI/models/PhotoData.dart';
 import 'package:surf_flutter_summer_school_24/postgramAPI/models/PhotoRepository.dart';
+import 'package:surf_flutter_summer_school_24/postgramAPI/models/apiKey.dart';
 
 class PostgramAPI implements PhotoRepository {
   //Test
@@ -21,7 +22,7 @@ class PostgramAPI implements PhotoRepository {
   // final _pathPhoto = "/client/disk/Photos";
 
   final _serverURL = "cloud-api.yandex.net";
-  final _apiKey = "";
+  final _apiKey = apiKey;
   final _postPathPhoto = "v1/disk/resources/upload";
   final _getPhotoPath = 'v1/disk/resources/files';
   @override
@@ -33,7 +34,7 @@ class PostgramAPI implements PhotoRepository {
         _serverURL,
         _getPhotoPath,
         {
-          'path': '1',
+          'path': '0',
         },
       ),
       headers: {
@@ -43,7 +44,7 @@ class PostgramAPI implements PhotoRepository {
 
     var jsonPhotoData =
         jsonDecode(postgramPhotosResponse.body) as Map<String, dynamic>;
-    print(jsonPhotoData['items'][0]['created']);
+    //print(jsonPhotoData['items'][0]['created']);
     int i = 0;
     for (Map<String, dynamic> photoJson in jsonPhotoData['items']) {
       final photo = PhotoData(
@@ -62,27 +63,32 @@ class PostgramAPI implements PhotoRepository {
 
   @override
   Future<bool> postPhoto(XFile newPhoto) async {
-    var postogramPhotoResponse = await http.get(
-      Uri.https(
-        _serverURL,
-        _postPathPhoto,
-        {"path": newPhoto.name},
-      ),
-      headers: {
-        HttpHeaders.authorizationHeader: 'OAuth $_apiKey',
-      },
-    );
+    try {
+      var postogramPhotoResponse = await http.get(
+        Uri.https(
+          _serverURL,
+          _postPathPhoto,
+          {"path": newPhoto.name},
+        ),
+        headers: {
+          HttpHeaders.authorizationHeader: 'OAuth $_apiKey',
+        },
+      );
 
-    final phohoJson =
-        jsonDecode(postogramPhotoResponse.body) as Map<String, dynamic>;
-    final linkToUpload = phohoJson['href'] as String;
+      final phohoJson =
+          jsonDecode(postogramPhotoResponse.body) as Map<String, dynamic>;
+      final linkToUpload = phohoJson['href'] as String;
 
-    final file = File(newPhoto.path);
-    final formData = FormData.fromMap({
-      "file": await MultipartFile.fromFile(file.path),
-    });
-    Dio().put(linkToUpload, data: formData);
-    return true;
+      final file = File(newPhoto.path);
+
+      final formData = FormData.fromMap({
+        "file": await MultipartFile.fromFile(file.path),
+      });
+      Dio().put(linkToUpload, data: formData);
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   //Download Photo

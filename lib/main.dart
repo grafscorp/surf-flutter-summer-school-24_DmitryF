@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:surf_flutter_summer_school_24/pages/GalleryPage.dart';
+import 'package:surf_flutter_summer_school_24/pages/HomePage.dart';
 import 'package:surf_flutter_summer_school_24/themes/ThemeProvider.dart';
 import 'package:surf_flutter_summer_school_24/themes/Themedark.dart';
 import 'package:surf_flutter_summer_school_24/themes/Themelight.dart';
@@ -22,7 +23,7 @@ class MainApp extends StatelessWidget {
             theme: notifier.isDark ? darkTheme() : lightTheme(),
             debugShowCheckedModeBanner: false,
             home: const Center(
-              child: GalleryPage(),
+              child: HomePage(),
             ),
           ),
         ));

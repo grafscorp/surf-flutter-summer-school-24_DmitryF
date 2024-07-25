@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 part of 'ImageListBloc.dart';
 
 class ImageListBlocState {}
@@ -11,4 +13,8 @@ class ImageListLoaded extends ImageListBlocState {
   final List<PhotoData> listPhotoData;
 }
 
-class ImageListFailed extends ImageListBlocState {}
+class ImageListEror extends ImageListBlocState {
+  final Object? exceptional;
+
+  ImageListEror({required this.exceptional});
+}

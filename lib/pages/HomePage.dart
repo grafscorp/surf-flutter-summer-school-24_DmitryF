@@ -1,10 +1,17 @@
+// ignore_for_file: file_names
+
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:surf_flutter_summer_school_24/buttons/SettingButton.dart';
+import 'package:surf_flutter_summer_school_24/models/ImageCompletedDialog.dart';
+import 'package:surf_flutter_summer_school_24/models/ImageFailedLoadDialog.dart';
+import 'package:surf_flutter_summer_school_24/models/ImageLoadingDialog.dart';
 import 'package:surf_flutter_summer_school_24/pages/FailedLoadPage.dart';
 import 'package:surf_flutter_summer_school_24/pages/GalleryPage.dart';
-import 'package:surf_flutter_summer_school_24/pages/ThemeBottomSheet.dart';
-import 'package:surf_flutter_summer_school_24/postgramAPI/bloc/ImageListBloc.dart';
+import 'package:surf_flutter_summer_school_24/postgramAPI/bloc/ImageList/ImageListBloc.dart';
+import 'package:surf_flutter_summer_school_24/postgramAPI/bloc/postImage/ImagePostBloc.dart';
 import 'package:surf_flutter_summer_school_24/themes/ThemeProvider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -29,29 +36,39 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Consumer<Themeprovider>(
-        builder: (context, Themeprovider notifier, child) {
-      return Scaffold(
-        appBar: _builAppBar(notifier.isDark),
-        body: BlocBuilder<ImageListBloc, ImageListBlocState>(
-          bloc: _imageListBloc,
-          builder: (context, state) {
-            if (state is ImageListLoaded) {
-              return Padding(
-                padding: const EdgeInsets.fromLTRB(5, 20, 5, 0),
-                child: GalleryPage(
-                  listPhoto: state.listPhotoData,
-                ),
-              );
-            } else if (state is ImageListFailed) {
-              return const FailedLoadPage();
-            }
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          },
-        ),
-      );
-    });
+      builder: (context, Themeprovider notifier, child) {
+        return Scaffold(
+          appBar: _builAppBar(notifier.isDark),
+          body: RefreshIndicator(
+            onRefresh: () async {
+              // final completer = Completer();
+              // _imageListBloc
+              //     .add(LoadImageListEvent(completer: completer));
+              // completer.future;
+              _imageListBloc.add(LoadImageListEvent());
+            },
+            child: BlocBuilder<ImageListBloc, ImageListBlocState>(
+              bloc: _imageListBloc,
+              builder: (context, state) {
+                if (state is ImageListLoaded) {
+                  return Padding(
+                    padding: const EdgeInsets.fromLTRB(5, 20, 5, 0),
+                    child: GalleryPage(
+                      listPhoto: state.listPhotoData,
+                    ),
+                  );
+                } else if (state is ImageListEror) {
+                  return const FailedLoadPage();
+                }
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              },
+            ),
+          ),
+        );
+      },
+    );
   }
 
   AppBar _builAppBar(bool isDarkTheme) {

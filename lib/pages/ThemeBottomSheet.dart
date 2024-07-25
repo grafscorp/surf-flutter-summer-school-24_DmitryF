@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:surf_flutter_summer_school_24/models/ImagePicker.dart';
+import 'package:surf_flutter_summer_school_24/postgramAPI/PostgramAPI.dart';
+import 'package:surf_flutter_summer_school_24/postgramAPI/models/PostgramPhotoController.dart';
 import 'package:surf_flutter_summer_school_24/themes/ThemeProvider.dart';
 
 class MenuBottomSheet extends StatefulWidget {
@@ -87,8 +90,18 @@ class _MenuBottomSheetState extends State<MenuBottomSheet> {
 
   Widget get _loadPhotoButton => ElevatedButton.icon(
         style: _buttonTheme,
-        onPressed: () {
-          ImagePickerController.pickImageFromGallery();
+        onPressed: () async {
+          if (PostgramPhotoController.photoList == []) return;
+          final _selectedImage =
+              await ImagePickerController.pickImageFromGallery();
+
+          PostgramAPI().getPhotos();
+          if (_selectedImage != null) {
+            if (PostgramAPI().postPhoto(_selectedImage) == true) {
+              PostgramPhotoController.updatePhotoList();
+            }
+            ;
+          }
         },
         label: Row(children: [
           Text(

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
-import 'package:surf_flutter_summer_school_24/pages/GalleryPage.dart';
 import 'package:surf_flutter_summer_school_24/pages/HomePage.dart';
+import 'package:surf_flutter_summer_school_24/postgramAPI/bloc/postImage/ImagePostBloc.dart';
 import 'package:surf_flutter_summer_school_24/themes/ThemeProvider.dart';
 import 'package:surf_flutter_summer_school_24/themes/Themedark.dart';
 import 'package:surf_flutter_summer_school_24/themes/Themelight.dart';
@@ -16,7 +17,9 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
+    return BlocProvider(
+      create: (context) => ImagePostBloc(),
+      child: ChangeNotifierProvider(
         create: (context) => Themeprovider()..init(),
         child: Consumer<Themeprovider>(
           builder: (context, Themeprovider notifier, child) => MaterialApp(
@@ -26,6 +29,8 @@ class MainApp extends StatelessWidget {
               child: HomePage(),
             ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

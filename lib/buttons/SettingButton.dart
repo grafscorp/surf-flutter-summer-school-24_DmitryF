@@ -1,5 +1,7 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
-import 'package:surf_flutter_summer_school_24/pages/ThemeBottomSheet.dart';
+import 'package:surf_flutter_summer_school_24/pages/SettingBottomSheet.dart';
 
 class SettingButton extends StatelessWidget {
   const SettingButton({super.key});

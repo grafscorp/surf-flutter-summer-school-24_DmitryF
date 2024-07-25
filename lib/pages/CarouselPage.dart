@@ -2,14 +2,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:surf_flutter_summer_school_24/postgramAPI/models/PhotoData.dart';
 //import 'package:surf_flutter_summer_school_24/postgramAPI/PostgramAPI.dart';
 
-import 'package:surf_flutter_summer_school_24/postgramAPI/models/PostgramPhotoController.dart';
 import 'package:surf_flutter_summer_school_24/postgramAPI/models/PostogramImage.dart';
 
 class CarouselPage extends StatefulWidget {
   final int indexPhoto;
-  const CarouselPage({super.key, required this.indexPhoto});
+  final List<PhotoData> listPhoto;
+  const CarouselPage(
+      {super.key, required this.indexPhoto, required this.listPhoto});
 
   @override
   State<CarouselPage> createState() {
@@ -19,7 +21,7 @@ class CarouselPage extends StatefulWidget {
 
 class _CarouselPageState extends State<CarouselPage> {
   //Variables
-
+  late final List<PhotoData> listPhoto;
   late int _maxPhoto;
   late int _nowPhoto;
   late DateTime? _photoCreatedAt;
@@ -29,6 +31,24 @@ class _CarouselPageState extends State<CarouselPage> {
   );
 
   final coutPhotoFontSize = 20.0;
+
+  @override
+  void initState() {
+    super.initState();
+    listPhoto = widget.listPhoto;
+    _nowPhoto = widget.indexPhoto;
+    _photoCreatedAt = listPhoto.elementAt(_nowPhoto).createdAt;
+    _maxPhoto = listPhoto.length;
+    if (_nowPhoto > _maxPhoto) _nowPhoto = 0;
+    setState(() {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        //Жду пока страница прогрузиться
+        if (_carouselController.hasClients) {
+          _carouselController.jumpToPage(_nowPhoto);
+        }
+      });
+    });
+  }
 
   //Widgets
   AppBar get _carouselAppBar => AppBar(
@@ -67,29 +87,11 @@ class _CarouselPageState extends State<CarouselPage> {
   void updatePhotoData(int indexPhoto) {
     setState(() {
       _nowPhoto = indexPhoto;
-      _photoCreatedAt =
-          PostgramPhotoController.photoList.elementAt(_nowPhoto).createdAt;
+      _photoCreatedAt = listPhoto.elementAt(_nowPhoto).createdAt;
     });
   }
 
   //override Methods
-  @override
-  void initState() {
-    super.initState();
-    _nowPhoto = widget.indexPhoto;
-    _photoCreatedAt =
-        PostgramPhotoController.photoList.elementAt(_nowPhoto).createdAt;
-    _maxPhoto = PostgramPhotoController.photoList.length;
-
-    setState(() {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        //Жду пока страница прогрузиться
-        if (_carouselController.hasClients) {
-          _carouselController.jumpToPage(_nowPhoto);
-        }
-      });
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +104,7 @@ class _CarouselPageState extends State<CarouselPage> {
   }
 
   Widget _carouselPhotoView() => PageView.builder(
-        itemCount: PostgramPhotoController.photoList.length,
+        itemCount: listPhoto.length,
         itemBuilder: (context, photoId) {
           bool isActivePhoto = photoId == (_nowPhoto);
           //Анимация для слайда изображений
@@ -132,7 +134,6 @@ class _CarouselPageState extends State<CarouselPage> {
         clipBehavior: Clip.antiAliasWithSaveLayer,
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(24.0)),
-        child: PostogramImage(
-            photoData: PostgramPhotoController.photoList.elementAt(index)));
+        child: PostogramImage(photoData: listPhoto.elementAt(index)));
   }
 }

@@ -21,8 +21,7 @@ class PostgramAPI implements PhotoRepository {
   // final _pathPhoto = "/client/disk/Photos";
 
   final _serverURL = "cloud-api.yandex.net";
-  final _apiKey =
-      "y0_AgAAAAB3JWdHAADLWwAAAAELc7J1AAASA6Ubh-VKjYlQdY53QCRmc1gEmw";
+  final _apiKey = "";
   final _postPathPhoto = "v1/disk/resources/upload";
   final _getPhotoPath = 'v1/disk/resources/files';
   @override

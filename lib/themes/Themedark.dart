@@ -16,6 +16,16 @@ ThemeData darkTheme() {
     appBarTheme: const AppBarTheme(
         backgroundColor: Colors.black, scrolledUnderElevation: 0.0),
     iconTheme: const IconThemeData(color: Colors.white),
-    elevatedButtonTheme: const ElevatedButtonThemeData(style: ButtonStyle()),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ButtonStyle(
+        shape: WidgetStatePropertyAll(
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0))),
+        elevation: const WidgetStatePropertyAll(0.0),
+        shadowColor: const WidgetStatePropertyAll(Colors.transparent),
+        side: const WidgetStatePropertyAll(
+          BorderSide(color: Colors.transparent, width: 0),
+        ),
+      ),
+    ),
   );
 }

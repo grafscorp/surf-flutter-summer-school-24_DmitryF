@@ -6,12 +6,14 @@ class ImageFailedLoadDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const AlertDialog(
-      title: Text("Загрузка изображения..."),
-      content: SizedBox(
-        width: 60,
-        height: 60,
-        child: CircularProgressIndicator(),
-      ),
-    );
+        title: Text("Загрузка изображения..."),
+        //content:
+        actions: [
+          SizedBox(
+            width: 60,
+            height: 60,
+            child: CircularProgressIndicator(),
+          ),
+        ]);
   }
 }

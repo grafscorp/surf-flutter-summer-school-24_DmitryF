@@ -7,28 +7,31 @@ import 'package:surf_flutter_summer_school_24/postgramAPI/models/PhotoData.dart'
 class PostogramImage extends StatelessWidget {
   const PostogramImage({super.key, required this.photoData});
   final PhotoData photoData;
-  static final customCacheManager = CacheManager(Config(
-    "CacheKey",
-    stalePeriod: const Duration(days: 2),
-  ));
+  static final customCacheManager = CacheManager(
+    Config(
+      "CacheKey",
+      stalePeriod: const Duration(days: 2),
+    ),
+  );
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
-        key: UniqueKey(),
-        imageUrl: photoData.url,
-        fit: BoxFit.cover,
-        placeholder: (context, url) => const LoadingImageContainer()
-
-        // Container(
-        //   decoration: const BoxDecoration(
-        //       gradient: LinearGradient(
-        //     colors: [
-        //       Color.fromARGB(255, 63, 63, 63),
-        //       Color.fromARGB(255, 185, 183, 183)
-        //     ],
-        //   )),
-        // ),
-
-        );
+      key: UniqueKey(),
+      imageUrl: photoData.url,
+      fit: BoxFit.cover,
+      placeholder: (context, url) => const LoadingImageContainer(),
+      errorWidget: (context, url, error) {
+        return const Icon(Icons.error);
+      },
+      // Container(
+      //   decoration: const BoxDecoration(
+      //       gradient: LinearGradient(
+      //     colors: [
+      //       Color.fromARGB(255, 63, 63, 63),
+      //       Color.fromARGB(255, 185, 183, 183)
+      //     ],
+      //   )),
+      // ),
+    );
   }
 }

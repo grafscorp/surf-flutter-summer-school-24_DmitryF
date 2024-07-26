@@ -1,7 +1,9 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:surf_flutter_summer_school_24/pages/ViewImagePage.dart';
 import 'package:surf_flutter_summer_school_24/postgramAPI/models/PhotoData.dart';
 //import 'package:surf_flutter_summer_school_24/postgramAPI/PostgramAPI.dart';
 
@@ -131,10 +133,26 @@ class _CarouselPageState extends State<CarouselPage> {
   //Форма для вывода изображений
   Widget _imageCard(index) {
     return Card(
-        semanticContainer: true,
-        clipBehavior: Clip.antiAliasWithSaveLayer,
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(24.0)),
-        child: PostogramImage(photoData: listPhoto.elementAt(index)));
+      semanticContainer: true,
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24.0)),
+      child: InkWell(
+        onTap: () {
+          Get.to(
+            () => ViewImagePage(photoData: listPhoto.elementAt(index)),
+            transition: Transition.size,
+          );
+        },
+        child: PostogramImage(
+          photoData: listPhoto.elementAt(index),
+        ),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _carouselController.dispose();
   }
 }

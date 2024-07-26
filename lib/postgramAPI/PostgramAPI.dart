@@ -27,6 +27,7 @@ class PostgramAPI implements PhotoRepository {
         _getPhotoPath,
         {
           'path': '1',
+          'limit': '200',
         },
       ),
       headers: {
@@ -34,7 +35,7 @@ class PostgramAPI implements PhotoRepository {
       },
     );
 
-    var jsonPhotoData =
+    Map<String, dynamic> jsonPhotoData =
         jsonDecode(postgramPhotosResponse.body) as Map<String, dynamic>;
     for (Map<String, dynamic> photoJson in jsonPhotoData['items']) {
       final photo = PhotoData(

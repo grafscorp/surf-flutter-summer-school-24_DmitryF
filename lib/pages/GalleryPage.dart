@@ -75,6 +75,7 @@ class _GalleryPageState extends State<GalleryPage> {
                 );
               },
               child: MasonryGridView.builder(
+                cacheExtent: 600,
                 gridDelegate:
                     const SliverSimpleGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,

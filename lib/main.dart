@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:surf_flutter_summer_school_24/pages/HomePage.dart';
+import 'package:surf_flutter_summer_school_24/postgramAPI/bloc/ImageList/ImageListBloc.dart';
 import 'package:surf_flutter_summer_school_24/postgramAPI/bloc/postImage/ImagePostBloc.dart';
 import 'package:surf_flutter_summer_school_24/themes/ThemeProvider.dart';
 import 'package:surf_flutter_summer_school_24/themes/Themedark.dart';
@@ -17,8 +18,15 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => ImagePostBloc(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => ImagePostBloc(),
+        ),
+        BlocProvider(
+          create: (context) => ImageListBloc(),
+        ),
+      ],
       child: ChangeNotifierProvider(
         create: (context) => Themeprovider()..init(),
         child: Consumer<Themeprovider>(

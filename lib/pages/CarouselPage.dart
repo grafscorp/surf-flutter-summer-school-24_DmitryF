@@ -67,7 +67,7 @@ class _CarouselPageState extends State<CarouselPage> {
         ),
         actions: [
           Padding(
-              padding: const EdgeInsets.fromLTRB(0, 10.0, 20.0, 5),
+              padding: const EdgeInsets.fromLTRB(0, 0.0, 20.0, 5),
               child: _countPhotoTitle),
         ],
       );
@@ -109,15 +109,16 @@ class _CarouselPageState extends State<CarouselPage> {
           bool isActivePhoto = photoId == (_nowPhoto);
           //Анимация для слайда изображений
           return AnimatedContainer(
-              duration: const Duration(milliseconds: 500),
-              curve: Curves.easeInOutCubic,
-              margin: EdgeInsets.only(
-                  left: isActivePhoto ? 0 : 10,
-                  top: isActivePhoto ? 0 : 40,
-                  right: isActivePhoto ? 0 : 10,
-                  bottom:
-                      isActivePhoto ? 0 : 40), // all(_isActivePhoto ? 10 : 20),
-              child: _imageCard(photoId));
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeInOutCubic,
+            margin: EdgeInsets.only(
+                left: isActivePhoto ? 0 : 10,
+                top: isActivePhoto ? 0 : 40,
+                right: isActivePhoto ? 0 : 10,
+                bottom:
+                    isActivePhoto ? 0 : 40), // all(_isActivePhoto ? 10 : 20),
+            child: _imageCard(photoId),
+          );
         },
         pageSnapping: true,
         physics: const BouncingScrollPhysics(),

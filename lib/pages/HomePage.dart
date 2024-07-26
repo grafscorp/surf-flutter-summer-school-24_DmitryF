@@ -1,17 +1,11 @@
 // ignore_for_file: file_names
 
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:surf_flutter_summer_school_24/buttons/SettingButton.dart';
-import 'package:surf_flutter_summer_school_24/models/ImageCompletedDialog.dart';
-import 'package:surf_flutter_summer_school_24/models/ImageFailedLoadDialog.dart';
-import 'package:surf_flutter_summer_school_24/models/ImageLoadingDialog.dart';
 import 'package:surf_flutter_summer_school_24/pages/FailedLoadPage.dart';
 import 'package:surf_flutter_summer_school_24/pages/GalleryPage.dart';
 import 'package:surf_flutter_summer_school_24/postgramAPI/bloc/ImageList/ImageListBloc.dart';
-import 'package:surf_flutter_summer_school_24/postgramAPI/bloc/postImage/ImagePostBloc.dart';
 import 'package:surf_flutter_summer_school_24/themes/ThemeProvider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -26,11 +20,12 @@ class _HomePageState extends State<HomePage> {
   final String titleImageLightDirectory = "assets/images/titlePGlight.png";
   final String titleImageDarkDirectory = "assets/images/titlePGdark.png";
 
-  final _imageListBloc = ImageListBloc();
+  //final _imageListBloc = ImageListBloc();
   @override
   void initState() {
     super.initState();
-    _imageListBloc.add(LoadImageListEvent());
+    //_imageListBloc.add(LoadImageListEvent());
+    context.read<ImageListBloc>().add(LoadImageListEvent());
   }
 
   @override
@@ -41,14 +36,10 @@ class _HomePageState extends State<HomePage> {
           appBar: _builAppBar(notifier.isDark),
           body: RefreshIndicator(
             onRefresh: () async {
-              // final completer = Completer();
-              // _imageListBloc
-              //     .add(LoadImageListEvent(completer: completer));
-              // completer.future;
-              _imageListBloc.add(LoadImageListEvent());
+              context.read<ImageListBloc>().add(LoadImageListEvent());
+              //BlocProvider.of<ImageListBloc>(context).add(LoadImageListEvent());
             },
             child: BlocBuilder<ImageListBloc, ImageListBlocState>(
-              bloc: _imageListBloc,
               builder: (context, state) {
                 if (state is ImageListLoaded) {
                   return Padding(

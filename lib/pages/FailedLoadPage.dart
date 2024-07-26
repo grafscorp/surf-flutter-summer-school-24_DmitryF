@@ -1,6 +1,8 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:surf_flutter_summer_school_24/postgramAPI/bloc/ImageList/ImageListBloc.dart';
 
 class FailedLoadPage extends StatelessWidget {
   const FailedLoadPage({super.key});
@@ -30,7 +32,9 @@ class FailedLoadPage extends StatelessWidget {
                 ?.copyWith(fontSize: 16),
           ),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              context.read<ImageListBloc>().add(LoadImageListEvent());
+            },
             style: Theme.of(context).elevatedButtonTheme.style?.copyWith(
                 shape: WidgetStatePropertyAll(RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16.0))),

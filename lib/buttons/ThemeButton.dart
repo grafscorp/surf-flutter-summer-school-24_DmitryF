@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, file_names
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -13,10 +14,10 @@ class ThemeButton extends StatelessWidget implements SettingButtonRef {
   TextStyle textStyle;
 
   ThemeButton({
-    Key? key,
+    super.key,
     required this.iconStyle,
     required this.textStyle,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

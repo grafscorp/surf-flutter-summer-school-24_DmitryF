@@ -12,19 +12,21 @@ import 'dart:convert';
 
 import 'package:surf_flutter_summer_school_24/postgramAPI/models/PhotoData.dart';
 import 'package:surf_flutter_summer_school_24/postgramAPI/models/PhotoRepository.dart';
-import 'package:surf_flutter_summer_school_24/postgramAPI/models/apiKey.dart';
+//import 'package:surf_flutter_summer_school_24/postgramAPI/models/apiKey.dart';
 
 class PostgramAPI implements PhotoRepository {
   //Test
   // final _serverURL = "disk.yandex.ru";
-  // final _apiKey =
-  //     "y0_AgAAAAB3JWdHAADLWwAAAAELc7J1AAASA6Ubh-VKjYlQdY53QCRmc1gEmw";
+  //  final apiKey =
+  //      "y0_AgAAAAB3JWdHAADLWwAAAAELc7J1AAASA6Ubh-VKjYlQdY53QCRmc1gEmw";
   // final _pathPhoto = "/client/disk/Photos";
 
   final _serverURL = "cloud-api.yandex.net";
-  final _apiKey = apiKey;
+  final _apiKey =
+      "y0_AgAAAAB3JWdHAADLWwAAAAELc7J1AAASA6Ubh-VKjYlQdY53QCRmc1gEmw";
   final _postPathPhoto = "v1/disk/resources/upload";
   final _getPhotoPath = 'v1/disk/resources/files';
+
   @override
   Future<List<PhotoData>> getPhotos() async {
     List<PhotoData> photoList = [];
@@ -34,7 +36,7 @@ class PostgramAPI implements PhotoRepository {
         _serverURL,
         _getPhotoPath,
         {
-          'path': '0',
+          'path': '1',
         },
       ),
       headers: {
@@ -45,16 +47,16 @@ class PostgramAPI implements PhotoRepository {
     var jsonPhotoData =
         jsonDecode(postgramPhotosResponse.body) as Map<String, dynamic>;
     //print(jsonPhotoData['items'][0]['created']);
-    int i = 0;
+    //print(jsonPhotoData['items']);
     for (Map<String, dynamic> photoJson in jsonPhotoData['items']) {
       final photo = PhotoData(
         id: 1,
-        url: jsonPhotoData['items'][i]['sizes'][0]['url'],
-        //url: photoJson[i]['sizes'][0]['url'],
-        createdAt: DateFormat("yyyy-MM-dd")
-            .parse(jsonPhotoData['items'][0]['created'].toString()),
+        //url: jsonPhotoData['items'][]['sizes'][0]['url'],
+        url: photoJson['sizes'][0]['url'],
+        createdAt:
+            DateFormat("yyyy-MM-dd").parse(photoJson['created'].toString()),
       );
-      i++;
+
       photoList.add(photo);
     }
 
@@ -84,7 +86,7 @@ class PostgramAPI implements PhotoRepository {
       final formData = FormData.fromMap({
         "file": await MultipartFile.fromFile(file.path),
       });
-      Dio().put(linkToUpload, data: formData);
+      await Dio().put(linkToUpload, data: formData);
       return true;
     } catch (e) {
       return false;

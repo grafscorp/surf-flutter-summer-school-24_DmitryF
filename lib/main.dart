@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -8,6 +9,7 @@ import 'package:surf_flutter_summer_school_24/postgramAPI/bloc/postImage/ImagePo
 import 'package:surf_flutter_summer_school_24/themes/ThemeProvider.dart';
 import 'package:surf_flutter_summer_school_24/themes/Themedark.dart';
 import 'package:surf_flutter_summer_school_24/themes/Themelight.dart';
+
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,6 +39,7 @@ class MainApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             home: const HomePage(),
           ),
+
         ),
       ),
     );

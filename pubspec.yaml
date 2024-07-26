@@ -31,11 +31,12 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^3.0.2
+  flutter_lints: ^4.0.0
 
-flutter_icons:
+flutter_launcher_icons:
   android: true
-  image_path: "assets/icons/postogramIcon.png"
+  ios: false
+  image_path: "assets/icons/icon.png"
 
 flutter:
   uses-material-design: true

@@ -1,5 +1,5 @@
 name: surf_flutter_summer_school_24
-description: "Surf Flutter Summer School '24"
+description: "This is an AMAZING program with which you can watch and upload your beautiful photos from YandexDisk  "
 publish_to: 'none'
 version: 0.1.0
 
@@ -21,14 +21,24 @@ dependencies:
   image_picker: 1.1.2
   dio: ^5.5.0+1
   bloc: 8.1.4
+  get: 4.6.6
+  flutter_staggered_grid_view: 0.7.0
   
+  
+
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^3.0.2
+  flutter_launcher_icons: 0.13.1
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  image_path: "assets/icons/postogramIcon.png"
 
 flutter:
   uses-material-design: true
   assets:
     - assets/images/
+    - assets/icons/

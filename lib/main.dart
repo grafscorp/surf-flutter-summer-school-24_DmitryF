@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:surf_flutter_summer_school_24/pages/HomePage.dart';
 import 'package:surf_flutter_summer_school_24/postgramAPI/bloc/ImageList/ImageListBloc.dart';
@@ -30,12 +31,11 @@ class MainApp extends StatelessWidget {
       child: ChangeNotifierProvider(
         create: (context) => Themeprovider()..init(),
         child: Consumer<Themeprovider>(
-          builder: (context, Themeprovider notifier, child) => MaterialApp(
+          builder: (context, Themeprovider notifier, child) => GetMaterialApp(
+            title: "Postogram",
             theme: notifier.isDark ? darkTheme() : lightTheme(),
             debugShowCheckedModeBanner: false,
-            home: const Center(
-              child: HomePage(),
-            ),
+            home: const HomePage(),
           ),
         ),
       ),

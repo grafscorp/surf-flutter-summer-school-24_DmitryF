@@ -36,7 +36,9 @@ class _HomePageState extends State<HomePage> {
           appBar: _builAppBar(notifier.isDark),
           body: RefreshIndicator(
             onRefresh: () async {
-              context.read<ImageListBloc>().add(LoadImageListEvent());
+              final tempListBloc = BlocProvider.of<ImageListBloc>(context);
+              tempListBloc.add(LoadImageListEvent());
+              //context.read<ImageListBloc>().add(LoadImageListEvent());
               //BlocProvider.of<ImageListBloc>(context).add(LoadImageListEvent());
             },
             child: BlocBuilder<ImageListBloc, ImageListBlocState>(

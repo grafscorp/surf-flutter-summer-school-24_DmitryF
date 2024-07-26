@@ -5,8 +5,10 @@ import 'package:surf_flutter_summer_school_24/models/LoadingImageContainer.dart'
 import 'package:surf_flutter_summer_school_24/postgramAPI/models/PhotoData.dart';
 
 class PostogramImage extends StatelessWidget {
-  const PostogramImage({super.key, required this.photoData});
+  const PostogramImage(
+      {super.key, required this.photoData, this.boxFit = BoxFit.cover});
   final PhotoData photoData;
+  final BoxFit? boxFit;
   static final customCacheManager = CacheManager(
     Config(
       "CacheKey",
@@ -18,20 +20,11 @@ class PostogramImage extends StatelessWidget {
     return CachedNetworkImage(
       key: UniqueKey(),
       imageUrl: photoData.url,
-      fit: BoxFit.cover,
+      fit: boxFit,
       placeholder: (context, url) => const LoadingImageContainer(),
       errorWidget: (context, url, error) {
         return const Icon(Icons.error);
       },
-      // Container(
-      //   decoration: const BoxDecoration(
-      //       gradient: LinearGradient(
-      //     colors: [
-      //       Color.fromARGB(255, 63, 63, 63),
-      //       Color.fromARGB(255, 185, 183, 183)
-      //     ],
-      //   )),
-      // ),
     );
   }
 }

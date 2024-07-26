@@ -27,5 +27,8 @@ class ImagePostBloc extends Bloc<ImagePostEvent, ImagePostState> {
         emit(ImagePostInit());
       },
     );
+    on<ErrorImagePostEvent>((event, emit) async {
+      emit(ImagePostEror(exceptional: null));
+    });
   }
 }

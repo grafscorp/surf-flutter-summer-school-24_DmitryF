@@ -12,8 +12,7 @@ import 'package:surf_flutter_summer_school_24/postgramAPI/models/PhotoRepository
 
 class PostgramAPI implements PhotoRepository {
   final _serverURL = "cloud-api.yandex.net";
-  final _apiKey =
-      "y0_AgAAAAB3JWdHAADLWwAAAAELc7J1AAASA6Ubh-VKjYlQdY53QCRmc1gEmw";
+  final _apiKey = "Write ur API";
   final _postPathPhoto = "v1/disk/resources/upload";
   final _getPhotoPath = 'v1/disk/resources/files';
 

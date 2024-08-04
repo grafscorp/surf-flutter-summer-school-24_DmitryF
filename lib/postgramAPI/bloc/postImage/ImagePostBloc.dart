@@ -11,6 +11,7 @@ class ImagePostBloc extends Bloc<ImagePostEvent, ImagePostState> {
   ImagePostBloc() : super(ImagePostInit()) {
     on<LoadImagePostEvent>(
       (event, emit) async {
+        emit(ImagePostLoading());
         try {
           if (await PostgramAPI().postPhoto(event.newPhoto)) {
             emit(ImagePostLoaded());

@@ -43,7 +43,6 @@ class PostgramAPI implements PhotoRepository {
         createdAt:
             DateFormat("yyyy-MM-dd").parse(photoJson['created'].toString()),
       );
-
       photoList.add(photo);
     }
 
@@ -70,9 +69,11 @@ class PostgramAPI implements PhotoRepository {
 
       final file = File(newPhoto.path);
 
-      final formData = FormData.fromMap({
-        "file": await MultipartFile.fromFile(file.path),
-      });
+      final formData = FormData.fromMap(
+        {
+          "file": await MultipartFile.fromFile(file.path),
+        },
+      );
       await Dio().put(linkToUpload, data: formData);
       return true;
     } catch (e) {
